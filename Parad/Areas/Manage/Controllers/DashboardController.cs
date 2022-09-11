@@ -16,9 +16,9 @@ namespace Parad.Areas.Manage.Controllers
         {
             return View();
         }
-        public async Task<IActionResult> Exit()
+        public RedirectResult Exit()
         {
-            return RedirectToAction();
+            return Redirect("https://localhost:44346");
         }
     }
 }
