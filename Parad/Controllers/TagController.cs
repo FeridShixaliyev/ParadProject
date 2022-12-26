@@ -2,8 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Parad.DAL;
 using Parad.Models;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 

@@ -1,53 +1,56 @@
 ﻿@using Parad.ViewModels
 @model AccountVM
-@{
-    ViewData["Title"] = "My Account";
-}
+@{ ViewData["Title"] = "My Account"; }
 
 <style>
-    
-    @@media only screen and (min-width: 1400px){
+
+    @@media only screen and (min-width: 1400px) {
         .masonry .item .details {
             left: 137px !important;
         }
     }
+
     @@media only screen and (min-width: 992px) and (max-width: 1200px) {
         .masonry .item .details {
             left: 137px !important;
         }
     }
+
     @@media only screen and (max-width: 992px) {
         .masonry .item .details {
             display: block
         }
     }
+
     @@media only screen and (min-width: 768px) and (max-width: 991px) {
         .masonry .item .details {
             left: 96px !important;
-            
         }
     }
+
     @@media only screen and (min-width: 576px) and (max-width: 768px) {
         .masonry .item .details {
             left: 112px !important;
         }
     }
+
     @@media only screen and (min-width: 321px) and (max-width: 576px) {
         .masonry .item {
             position: relative;
             display: flex;
             justify-content: center;
         }
-        .masonry .item .details {
-            left: auto !important;
-        }
+
+            .masonry .item .details {
+                left: auto !important;
+            }
     }
+
     @@media only screen and (min-width: 299px) and (max-width: 320px) {
         .masonry .item .details {
             left: 132px !important;
         }
     }
-
 </style>
 <section>
     <div class="profile-img-converter" style="display:none">
@@ -126,29 +129,27 @@
                     </div>
                     @if (@Model.Images.Where(i => i.User == Model.AppUser).ToList().Count > 0)
                     {
-                        <div class="get-start">
-                            <a asp-controller="Image" asp-action="AddImage">
-                                <p>
-                                    Download Image
-                                </p>
-                            </a>
-                        </div>
-                    }
+        <div class="get-start">
+            <a asp-controller="Image" asp-action="AddImage">
+                <p>
+                    Share Image
+                </p>
+            </a>
+        </div> }
                     else
                     {
-                        <div class="status-title">
-                            <p>
-                                Start Your Parad career
-                            </p>
-                        </div>
+        <div class="status-title">
+            <p>
+                Start Your Parad career
+            </p>
+        </div>
                         <div class="get-start">
                             <a asp-controller="Image" asp-action="AddImage">
                                 <p>
                                     Get Start
                                 </p>
                             </a>
-                        </div>
-                    }
+                        </div>}
                 </div>
             </div>
         </div>
@@ -165,57 +166,54 @@
             </div>
             @if (@Model.Images.Where(i => i.User == Model.AppUser).ToList().Count > 0)
             {
-                <div class="masonry">
-                    @foreach (var item in @Model.Images.Where(i => i.User == Model.AppUser))
-                    {
-                        <div class="item">
-                            <img src="./assets/images/@item.ImageStr">
-                            <div class="user-img-icon">
-                                <img src="./assets/images/@item.User.ProfileImage" alt="">
-                                <p>
-                                    You
-                                </p>
-                            </div>
-                            <a asp-controller="Image" asp-action="DeleteImage" asp-route-id="@item.Id" class="add-to-collection">
-                                <i class="fa-solid fa-trash"></i>
-                                <span class="tooltiptext">Delete</span>
-                            </a>
-                            <a id="likeABtn" data-id="@item.Id" class="like">
-                                <i class="fa-solid fa-heart">
-                                </i>
-                                <span class="tooltiptext">like</span>
-                            </a>
-                            <a href="./assets/images/@item.ImageStr" download class="download">
-                                <i class="fa-solid fa-arrow-down"></i>
-                                <span class="tooltiptext">download</span>
-                            </a>
-                            <a asp-controller="Image" asp-action="Details" asp-route-id="@item.Id" class="details" style="top: 10px;left: 119px;">
-                                <i class="fa-solid fa-info" style="font-size: 18px;"></i>
-                                <span class="tooltiptext">Details</span>
-                            </a>
-                        </div>
-                    }
-                </div>
-            }
+<div class="masonry">
+    @foreach (var item in @Model.Images.Where(i => i.User == Model.AppUser))
+    {
+<div class="item">
+    <img src="./assets/images/@item.ImageStr">
+    <div class="user-img-icon">
+        <img src="./assets/images/@item.User.ProfileImage" alt="">
+        <p>
+            You
+        </p>
+    </div>
+    <a data-id="@item.Id" class="add-to-collection">
+        <i class="fa-solid fa-trash"></i>
+        <span class="tooltiptext">Delete</span>
+    </a>
+    <a id="likeABtn" data-id="@item.Id" class="like">
+        <i class="fa-solid fa-heart">
+        </i>
+        <span class="tooltiptext">like</span>
+    </a>
+    <a href="./assets/images/@item.ImageStr" download class="download">
+        <i class="fa-solid fa-arrow-down"></i>
+        <span class="tooltiptext">download</span>
+    </a>
+    <a asp-controller="Image" asp-action="Details" asp-route-id="@item.Id" class="details" style="top: 10px;left: 119px;">
+        <i class="fa-solid fa-info" style="font-size: 18px;"></i>
+        <span class="tooltiptext">Details</span>
+    </a>
+</div>}
+</div> }
             else
             {
-                <div style="margin-top:35px;margin-bottom:100px">
-                    <h2 style="display: flex; justify-content: center; font-weight: 900; color: gray; margin-bottom: 20px">
-                        You don't have image in <bold style=" margin-left: 8px; color: rgb(4, 170, 109); isolation: isolate;"> Parad</bold>
-                    </h2>
-                    <div style="display: flex; justify-content: center; font-size: 18px; color: gray; font-weight: 500; margin-bottom: 20px">
-                        <p style="margin-right:8px">
-                            If you want to join our family
-                        </p>
-                        <i class="fa-solid fa-arrow-down" style="font-size: 22px; padding-top: 3px; color: rgb(4, 170, 109);"></i>
-                    </div>
-                    <div style="display:flex;justify-content:center">
-                        <a asp-controller="Image" asp-action="AddImage" style=" font-size: 18px; font-weight: 500;color: green;">
-                            Download
-                        </a>
-                    </div>
-                </div>
-            }
+<div style="margin-top:35px;margin-bottom:100px">
+    <h2 style="display: flex; justify-content: center; font-weight: 900; color: gray; margin-bottom: 20px">
+        You don't have image in <bold style=" margin-left: 8px; color: rgb(4, 170, 109); isolation: isolate;"> Parad</bold>
+    </h2>
+    <div style="display: flex; justify-content: center; font-size: 18px; color: gray; font-weight: 500; margin-bottom: 20px">
+        <p style="margin-right:8px">
+            If you want to join our family
+        </p>
+        <i class="fa-solid fa-arrow-down" style="font-size: 22px; padding-top: 3px; color: rgb(4, 170, 109);"></i>
+    </div>
+    <div style="display:flex;justify-content:center">
+        <a asp-controller="Image" asp-action="AddImage" style=" font-size: 18px; font-weight: 500;color: green;">
+            Share
+        </a>
+    </div>
+</div>            }
             <div class="popup-img darkmode-ignore">
                 <span>&times;</span>
                 <img src="" alt="">
@@ -224,3 +222,52 @@
     </div>
 
 </section>
+@section scripts{
+    <script>
+        let deleteItems = document.querySelectorAll('.add-to-collection')
+        deleteItems.forEach(deleteItem => {
+            deleteItem.addEventListener("click", function (e) {
+                //e.preventDefalt()
+                let dataId = deleteItem.getAttribute("data-id")
+                $.ajax({
+                    type: "GET",
+                    url: '/Image/DeleteImage/' + dataId,
+                    //data: deleteItem.getAttribute("data-id"),
+                    success: function (datas) {
+                        if (datas) {
+                            swal({
+                                title: "Image deleted !",
+                                text: "You have successfully deleled the image .",
+                                icon: "success",
+                                button: "Ok",
+                            });
+
+                        }
+                    },
+                    error: function (erro) {
+                        alert("Error")
+                    }
+                });
+            })
+        })
+
+        
+
+
+        //let deleteItems = document.querySelectorAll(".add-to-collection")
+        //deleteItems.forEach(deleteItem => {
+        //    deleteItem.addEventListener("click", function (e) {
+                
+        //        e.preventDefault()
+        //        dataId = deleteItem.getAttribute("data-id")
+        //        alert(dataId)
+        //        requestUrl = "https://localhost:44346/Image/DeleteImage/" + dataId
+
+        //        //$.get(requestUrl, function (response) {
+        //        //    document.getElementById("ajaxLikeCount").innerHTML = response
+        //        //})
+        //    })
+        //})
+
+    </script>
+}

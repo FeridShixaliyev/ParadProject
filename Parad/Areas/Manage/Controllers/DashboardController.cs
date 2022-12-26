@@ -8,17 +8,13 @@ namespace Parad.Areas.Manage.Controllers
     [Authorize(Roles = "Admin,Moderator")]
     public class DashboardController : Controller
     {
-        public DashboardController()
-        {
-
-        }
         public IActionResult Index()
         {
             return View();
         }
-        public async Task<IActionResult> Exit()
+        public RedirectResult Exit()
         {
-            return RedirectToAction();
+            return Redirect("https://localhost:44346");
         }
     }
 }

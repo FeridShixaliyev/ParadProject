@@ -53,12 +53,12 @@ namespace Parad.Controllers
                 if (!user.ProfileImageFile.IsImage())
                 {
                     ModelState.AddModelError("ProfileImageFile", "Sekilin formati duzgun deyil!!");
-                    return View();
+                    return View(user);
                 }
                 if (!user.ProfileImageFile.IsSizeOk(5))
                 {
                     ModelState.AddModelError("ProfileImageFile", "Sekil 5 mb-dan boyuk ola bilmez!!");
-                    return View();
+                    return View(user);
                 }
                 if (existUser.ProfileImage == "default-profile-img.jpg")
                 {
@@ -78,10 +78,11 @@ namespace Parad.Controllers
             existUser.LastName = user.LastName;
             existUser.UserName = user.UserName;
             existUser.Email = user.Email;
-            //if ()
-            //{
-
-            //}
+            if (user.PasswordHash==null)
+            {
+                ModelState.AddModelError("PasswordHash", "Sifrenizi qeyd edin!!");
+                return View(user);
+            }
             IdentityResult result = await _userManager.RemovePasswordAsync(existUser);
             if (result.Succeeded)
             {
@@ -91,7 +92,7 @@ namespace Parad.Controllers
                     foreach (var item in result.Errors)
                     {
                         ModelState.AddModelError("PasswordHash", item.Description);
-                        return View();
+                        return View(user);
                     }
                 }
             }
@@ -108,7 +109,6 @@ namespace Parad.Controllers
             {
                 User = await _userManager.FindByNameAsync(User.Identity.Name),
                 Favorites = await _sql.Favorites.Include(f => f.User).Include(f => f.Image).ThenInclude(i => i.User).ToListAsync(),
-                //Images = await _sql.Images.Where();
             };
             return View(favoritesVM);
         }

@@ -76,6 +76,11 @@ namespace Parad.Controllers
                 ModelState.AddModelError("", "Sifreniz veya Istifadeci adiniz yanlisdir!");
                 return View();
             }
+            if (loginVM.Password == null)
+            {
+                ModelState.AddModelError("Password", "Sifreni daxil edin!!");
+                return View();
+            }
             var result = await _signInManager.PasswordSignInAsync(user, loginVM.Password, loginVM.RememberMe,true);
             if (result.IsLockedOut)
             {

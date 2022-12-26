@@ -45,7 +45,7 @@
                     <p>
                         NOTE :<br>
                         Dear @ViewBag.AppUser.UserName , Please choose most correct  category of image when downloading image .
-                        This will make your downloaded image stand out more .
+                        This will make your downloaded image stand out more.
                     </p>
                 </div>
                 <form method="post" enctype="multipart/form-data">
@@ -57,7 +57,7 @@
                         </select>
                     </div>
                     <div style="margin-bottom:20px">
-                        <label asp-for="TagIds">Choose image tags :</label>
+                        <label asp-for="TagIds">Choose image tags :  ( You can choose max 3 tags for per image!! )</label>
                         <select class="js-example-basic-multiple form-select my-3" asp-for="TagIds" multiple asp-items="@(new SelectList(ViewBag.Tags,nameof(Tag.Id),nameof(Tag.TagName)))" aria-label="Default select example">
                         </select>
                         <span asp-validation-for="TagIds"></span>
@@ -71,7 +71,7 @@
                             Create Tag
                         </a>
                     </div>
-                    <div asp-validation-summary="ModelOnly"></div>
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <button type="submit" class="btn btn-success">Share</button>
                 </form>
             </div>
@@ -84,6 +84,12 @@
     <script>
         $(document).ready(function () {
             $('.js-example-basic-multiple,.js-example-basic-single').select2();
+        });
+        //Max 3 tags for each image
+        $("select").on('change', function (e) {
+            if (Object.keys($(this).val()).length > 3) {
+                $('option[value="' + $(this).val().toString().split(',')[3] + '"]').prop('selected', false);
+            }
         });
     </script>
 

@@ -1,0 +1,29 @@
+﻿
+@foreach (var item in Model)
+{
+<div class="item">
+    <img src="~/assets/images/@item.ImageStr">
+    <div class="user-img-icon">
+        <img src="~/assets/images/@item.User.ProfileImage" alt="">
+        <p>
+            @item.User.UserName
+        </p>
+    </div>
+    <a asp-controller="Image" asp-action="AddFavorites" asp-route-id="@item.Id" class="add-to-collection">
+        <i class="fa-solid fa-plus"></i>
+        <span class="tooltiptext">add to favorites</span>
+    </a>
+    <a class="like" data-id="@item.Id">
+        <i class="fa-solid fa-heart">
+        </i>
+        <span class="tooltiptext">like</span>
+    </a>
+    <a href="~/assets/images/@item.ImageStr" download class="download">
+        <i class="fa-solid fa-arrow-down"></i>
+        <span class="tooltiptext">download</span>
+    </a>
+    <a asp-controller="Image" asp-action="Details" asp-route-id="@item.Id" class="details" style="top: 10px;left: 119px;">
+        <i class="fa-solid fa-info" style="font-size: 18px;"></i>
+        <span class="tooltiptext">Details</span>
+    </a>
+</div>}

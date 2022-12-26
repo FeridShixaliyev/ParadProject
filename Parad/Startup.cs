@@ -41,8 +41,8 @@ namespace Parad
                 opt.Password.RequireUppercase = true;
                 opt.Password.RequireNonAlphanumeric = false;
 
-                opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(2);
-                opt.Lockout.MaxFailedAccessAttempts = 4;
+                opt.Lockout.MaxFailedAccessAttempts = 3;
+                opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(1);
                 opt.Lockout.AllowedForNewUsers = true;
 
                 opt.User.RequireUniqueEmail = true;

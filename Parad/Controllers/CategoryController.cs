@@ -1,16 +1,16 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Parad.DAL;
 using Parad.Models;
 using Parad.ViewModels;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Parad.Controllers
 {
+    [Authorize]
     public class CategoryController : Controller
     {
         private readonly AppDbContext _sql;
@@ -36,7 +36,7 @@ namespace Parad.Controllers
             GetCategoryVM getCategoryVM = new GetCategoryVM
             {
                 AppUser = await _userManager.FindByNameAsync(User.Identity.Name),
-                Images = await _sql.Images.Include(i => i.User).Where(i=>i.CategoryId==id).ToListAsync(),
+                Images = await _sql.Images.Include(i => i.User).Where(i=>i.CategoryId==id).OrderByDescending(i=>i.DownloadDate).ToListAsync(),
                 Category = await _sql.Categories.FindAsync(id),
                 Likes = await _sql.Likes.ToListAsync()
             };

@@ -18,12 +18,14 @@ namespace Parad.Areas.Manage.Controllers
     public class UserController : Controller
     {
         private readonly UserManager<AppUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly AppDbContext _sql;
         private readonly IWebHostEnvironment _env;
 
-        public UserController(AppDbContext sql,IWebHostEnvironment env,UserManager<AppUser> userManager)
+        public UserController(AppDbContext sql,IWebHostEnvironment env,UserManager<AppUser> userManager,RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
+            _roleManager = roleManager;
             _sql = sql;
             _env = env;
         }
@@ -31,6 +33,22 @@ namespace Parad.Areas.Manage.Controllers
         {
             List<AppUser> users = await _userManager.Users.ToListAsync();
             return View(users);
+        }
+        public async Task<IActionResult> Block(string? id)
+        {
+            AppUser user = await _userManager.FindByIdAsync(id);
+            if (user == null) return NotFound();
+            await _userManager.SetLockoutEnabledAsync(user,true);
+            await _userManager.UpdateAsync(user);
+            return RedirectToAction("Index", "User");
+        }
+        public async Task<IActionResult> Delete(string? id)
+        {
+            AppUser user =await _userManager.FindByIdAsync(id);
+            if (user == null) return NotFound();
+            await _userManager.DeleteAsync(user);
+            await _userManager.UpdateAsync(user);
+            return RedirectToAction("Index","User");
         }
     }
 }

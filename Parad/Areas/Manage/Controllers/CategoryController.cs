@@ -107,6 +107,15 @@ namespace Parad.Areas.Manage.Controllers
         {
             Category category = await _sql.Categories.FindAsync(id);
             if (category == null) return NotFound();
+            List<Image> images = await _sql.Images.Where(i=>i.CategoryId==id).ToListAsync();
+            if (images.Count > 0)
+            {
+                foreach (var item in images)
+                {
+                    _sql.Images.Remove(item);
+                    await _sql.SaveChangesAsync();
+                }
+            }
             _sql.Categories.Remove(category);
             await _sql.SaveChangesAsync();
             return RedirectToAction("Index", "Category");

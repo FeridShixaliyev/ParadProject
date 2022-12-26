@@ -41,12 +41,13 @@ namespace Parad.Controllers
         public async Task<IActionResult> AddImage(ImageAndTagsVM imageAndTagsVM)
         {
             //return Json(imageAndTagsVM.TagIds.Count);
-            if (!ModelState.IsValid) return View();
+            if (!ModelState.IsValid) return View(imageAndTagsVM);
             if (imageAndTagsVM == null) return NotFound();
+            imageAndTagsVM.User = await _userManager.FindByNameAsync(User.Identity.Name);
             if (imageAndTagsVM.TagIds.Count > 3)
             {
-                ModelState.AddModelError("TagIds", "Max 3 tag sece bilersiz !!");
-                return View();
+                ModelState.AddModelError("", "Max 3 tag sece bilersiz !!");
+                return View(imageAndTagsVM);
             }
             var image = imageAndTagsVM.Image;
             if (image.ImageFile != null)
@@ -54,12 +55,12 @@ namespace Parad.Controllers
                 if (!image.ImageFile.IsImage())
                 {
                     ModelState.AddModelError("", "Sekilin formati duzgun deyil!!");
-                    return View();
+                    return View(imageAndTagsVM);
                 }
                 if (!image.ImageFile.IsSizeOk(5))
                 {
                     ModelState.AddModelError("", "Sekil 5 mb-dan boyuk ola bilmez!!");
-                    return View();
+                    return View(imageAndTagsVM);
                 }
                 image.ImageStr = image.ImageFile.SavaImage(_env.WebRootPath, "assets/images");
             }
@@ -77,11 +78,10 @@ namespace Parad.Controllers
 
             };
 
-            
+
 
             await _sql.Images.AddAsync(image);
             await _sql.Likes.AddAsync(like);
-            await _sql.SaveChangesAsync();
 
             //Create TagImages
 
@@ -128,16 +128,17 @@ namespace Parad.Controllers
             };
 
             like.LikeCount++;
-            
+
             await _sql.LikeUsers.AddAsync(likeUser);
             await _sql.SaveChangesAsync();
-            return like.LikeCount; 
+            return like.LikeCount;
         }
+        [HttpGet]
         public async Task<IActionResult> DeleteImage(int? id)
         {
             Image image = await _sql.Images.FindAsync(id);
             if (image == null) return NotFound();
-            Helpers.Helper.DeleteImg(_env.WebRootPath,"assets/images",image.ImageStr);
+            Helpers.Helper.DeleteImg(_env.WebRootPath, "assets/images", image.ImageStr);
             _sql.Images.Remove(image);
             await _sql.SaveChangesAsync();
             return RedirectToAction("Index", "Account");
@@ -179,16 +180,16 @@ namespace Parad.Controllers
                 User = await _userManager.FindByNameAsync(User.Identity.Name),
                 Image = await _sql.Images.Include(i => i.User).FirstOrDefaultAsync(i => i.Id == id),
                 Images = await _sql.Images.Include(i => i.User).ToListAsync(),
-                TagImages=await _sql.TagImages.Include(t=>t.Tag).Where(t=>t.ImageId==id).ToListAsync(),
-                Comments = await _sql.Comments.Where(c=>c.ImageId==id).Include(c=>c.User).ToListAsync(),
-                Like=await _sql.Likes.Where(l=>l.ImageId==id).FirstOrDefaultAsync(),
+                TagImages = await _sql.TagImages.Include(t => t.Tag).Where(t => t.ImageId == id).ToListAsync(),
+                Comments = await _sql.Comments.Where(c => c.ImageId == id).Include(c => c.User).ToListAsync(),
+                Like = await _sql.Likes.Where(l => l.ImageId == id).FirstOrDefaultAsync(),
                 Comment = new Comment()
             };
             return View(details);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Details(int? id,Comment comment)
+        public async Task<IActionResult> Details(int? id, Comment comment)
         {
             if (id == null) return NotFound();
             DetailsVM detailsVM = new DetailsVM
@@ -203,7 +204,7 @@ namespace Parad.Controllers
             };
             if (comment.Content == null)
             {
-                ModelState.AddModelError("","Yorumunuzda icerik yoxdu!");
+                ModelState.AddModelError("", "Yorumunuzda icerik yoxdu!");
                 return View(detailsVM);
             }
             Image image = await _sql.Images.FindAsync(id);
@@ -215,7 +216,7 @@ namespace Parad.Controllers
             comment.CommentDate = DateTime.UtcNow;
             await _sql.Comments.AddAsync(comment);
             await _sql.SaveChangesAsync();
-            return RedirectToAction("Details","Image",id);
+            return RedirectToAction("Details", "Image", id);
         }
 
 
