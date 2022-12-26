@@ -79,9 +79,9 @@ namespace Parad.Controllers
             };
 
 
-
             await _sql.Images.AddAsync(image);
             await _sql.Likes.AddAsync(like);
+            await _sql.SaveChangesAsync();
 
             //Create TagImages
 
