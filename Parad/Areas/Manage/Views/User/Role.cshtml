@@ -1,0 +1,37 @@
+﻿@using Parad.Areas.Manage.ViewModels
+@model RoleVM
+@{
+    ViewData["Title"] = "Role";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-3"></div>
+        <div class="col-lg-6">
+            <div style="font-size: 30px; color: black; font-weight: 600; ">User data :</div>
+            <div style="margin-top: 20px;">
+                <p style="color: black; font-size: 17px">Username : @Model.User.UserName</p>
+                @foreach (var item in Model.Roles)
+                {
+                    <p style="color:black;font-size:17px">Role : @item</p>
+                }
+            </div>
+            <form method="post" enctype="multipart/form-data">
+                <input asp-for="@Model.User.Id" style="display:none" />
+                <select asp-for="@Model.Roles" id="pet-select">
+                    @foreach (var item in ViewBag.userRoles)
+                    {
+                        <option>@item</option>
+                    }
+                </select>
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div style="display: flex; justify-content: space-between; margin-top: 15px;">
+                    <button type="submit" style="width: 80px; background: #44ce42; border-radius: 17px; border:none">Save</button>
+                    <a asp-controller="User" asp-action="Index" style="color:black">Back to User List --></a>
+                </div>
+            </form>
+        </div>
+        <div class="col-lg-3"></div>
+    </div>
+</div>
+

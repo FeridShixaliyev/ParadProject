@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Parad.Areas.Manage.ViewModels;
 using Parad.DAL;
 using Parad.Models;
 using System;
@@ -48,6 +49,51 @@ namespace Parad.Areas.Manage.Controllers
             if (user == null) return NotFound();
             await _userManager.DeleteAsync(user);
             await _userManager.UpdateAsync(user);
+            return RedirectToAction("Index","User");
+        }
+        
+        public async Task<IActionResult> Role(string id)
+        {
+            var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == id);
+            RoleVM roleVM = new RoleVM()
+            {
+                User = user,
+                Roles = await _userManager.GetRolesAsync(user)
+            };
+            ViewBag.userRoles = await _roleManager.Roles.ToListAsync();
+            
+            return View(roleVM);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Role(RoleVM roleObject,string id)
+        {
+            AppUser user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == roleObject.User.Id);
+            if (user == null) return NotFound();
+            roleObject.User = user;
+            var userRole= await _userManager.GetRolesAsync(user);
+            foreach (var newRole in roleObject.Roles)
+            {
+                foreach (var item in userRole)
+                {
+                    if (newRole != item)
+                    {
+                        await _userManager.AddToRoleAsync(user,newRole);
+                        await _userManager.RemoveFromRolesAsync(user,userRole);
+                    }
+                    else
+                    {
+                        ViewBag.userRoles = await _roleManager.Roles.ToListAsync();
+                        ModelState.AddModelError("", "The user already has the role you selected.");
+                        return View(new RoleVM() { 
+                            User=roleObject.User,
+                            Roles=roleObject.Roles
+                        });
+                    }
+                }
+            }
+
+            await _sql.SaveChangesAsync();
+
             return RedirectToAction("Index","User");
         }
     }
