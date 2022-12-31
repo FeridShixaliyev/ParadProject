@@ -62,6 +62,8 @@ namespace Parad.Areas.Manage.Controllers
             
             return View(roleVM);
         }
+
+        //Update user role
         [HttpPost]
         public async Task<IActionResult> Role(RoleVM roleObject,string id)
         {

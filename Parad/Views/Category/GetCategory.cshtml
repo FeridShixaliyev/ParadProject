@@ -94,7 +94,7 @@
             @if (Model.Images.ToList().Count > 0)
             {
         <div class="masonry">
-            @await Html.PartialAsync("_ImagePartial", Model.Images);
+            @await Html.PartialAsync("_ImagePartial", Model.Images)
             @*@foreach (var item in Model.Images)
             {
         <div class="item">
