@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Parad.DAL;
@@ -34,6 +35,7 @@ namespace Parad.Controllers
             };
             return View(homeVM);
         }
+        [Authorize]
         public async Task<IActionResult> About()
         {
             ViewBag.AppUser = await _userManager.FindByNameAsync(User.Identity.Name);
